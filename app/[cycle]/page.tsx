@@ -68,6 +68,8 @@ export default async function Cycle({ params }: { params: { cycle: string } }) {
   return (
     <>
       <BackButton href="/" title="Back to month page" />
+      <h2>{JSON.stringify(new Date())}</h2>
+      <h2>{JSON.stringify(currentWeekStartedAt)}</h2>
       <div className="flex justify-center items-center p-24 min-h-screen">
         {!weeks.length ? (
           <AddNewWeek action={addNewWeek} monthId={cycle.id} />
