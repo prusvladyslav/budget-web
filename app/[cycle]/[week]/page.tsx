@@ -82,3 +82,5 @@ export const metadata: Metadata = {
   title: "Categories page",
   description: "Categories page",
 };
+
+export const dynamic = "force-dynamic";

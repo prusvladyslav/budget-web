@@ -114,3 +114,5 @@ export const metadata: Metadata = {
   title: "Month page",
   description: "Month page",
 };
+
+export const dynamic = "force-dynamic";

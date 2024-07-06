@@ -89,3 +89,5 @@ export const metadata: Metadata = {
   title: "Weeks page",
   description: "Weeks page",
 };
+
+export const dynamic = "force-dynamic";

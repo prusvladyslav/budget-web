@@ -42,3 +42,5 @@ export default async function Component() {
 
   return <PreferencesForm action={saveUserPreferences} user={user} />;
 }
+
+export const dynamic = "force-dynamic";

@@ -20,7 +20,6 @@ export default async function Category({
   const cycle = await db.query.cyclesTable.findFirst({
     where: eq(cyclesTable.dateFrom, decodeURIComponent(params.cycle)),
   });
-  console.log(cycle);
 
   if (!cycle) return null;
 
@@ -42,6 +41,7 @@ export default async function Category({
       eq(expensesTable.categoryId, category.id)
     ),
   });
+
   return (
     <div className="space-y-4">
       <BackButton
@@ -94,3 +94,5 @@ export const metadata: Metadata = {
   title: "Category page",
   description: "Category page",
 };
+
+export const dynamic = "force-dynamic";
