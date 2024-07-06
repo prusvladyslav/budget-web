@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { last } from "lodash";
 import { Metadata } from "next";
 import { revalidatePath, unstable_noStore } from "next/cache";
+import { toZonedTime } from "date-fns-tz";
 
 export type TAddNewWeek = {
   monthId: string;
@@ -22,7 +23,9 @@ async function addNewWeek({ monthId }: TAddNewWeek) {
       dateFrom: new Date(
         date.getFullYear(),
         getMonth(date),
-        startOfWeek(date, { weekStartsOn: 1 }).getDate(),
+        startOfWeek(toZonedTime(new Date(), "Europe/Kiev"), {
+          weekStartsOn: 1,
+        }).getDate(),
         0,
         0,
         0,
@@ -31,7 +34,9 @@ async function addNewWeek({ monthId }: TAddNewWeek) {
       dateTo: new Date(
         date.getFullYear(),
         getMonth(date),
-        endOfWeek(date, { weekStartsOn: 1 }).getDate(),
+        endOfWeek(toZonedTime(new Date(), "Europe/Kiev"), {
+          weekStartsOn: 1,
+        }).getDate(),
         0,
         0,
         0,
@@ -58,7 +63,12 @@ export default async function Cycle({ params }: { params: { cycle: string } }) {
     where: eq(weeksTable.monthId, cycle.id),
   });
 
-  const currentWeekStartedAt = startOfWeek(new Date(), { weekStartsOn: 1 });
+  const currentWeekStartedAt = startOfWeek(
+    toZonedTime(new Date(), "Europe/Kiev"),
+    {
+      weekStartsOn: 1,
+    }
+  );
 
   const lastWeek = last(weeks);
 
