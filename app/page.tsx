@@ -14,6 +14,7 @@ import { last } from "lodash";
 import { AddNewCycleCard } from "@/components/cycle/AddNewCycleCard";
 import { Metadata } from "next";
 import { BackButton } from "@/components/common/BackButton";
+import { toZonedTime } from "date-fns-tz";
 
 export type TAddNewCycle = {
   userId: string;
@@ -29,7 +30,7 @@ async function addNewCycle({
   categories,
 }: TAddNewCycle) {
   "use server";
-  const date = new Date();
+  const date = toZonedTime(new Date(), "Europe/Kiev");
   const month = getMonth(date);
 
   try {
@@ -84,13 +85,15 @@ export default async function Home() {
   const cycles = await db.query.cyclesTable.findMany({
     where: eq(cyclesTable.userId, user.id),
   });
-
-  const currentMonth = getMonth(new Date());
+  const timeZonedToday = toZonedTime(new Date(), "Europe/Kiev");
+  const currentMonth = getMonth(timeZonedToday);
 
   const lastCycle = last(cycles);
 
   const noCycleForCurrentMonth =
-    !lastCycle || getMonth(new Date(lastCycle.dateFrom)) !== currentMonth;
+    !lastCycle ||
+    getMonth(toZonedTime(new Date(lastCycle.dateFrom), "Europe/Kiev")) !==
+      currentMonth;
 
   return (
     <>

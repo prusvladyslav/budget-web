@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import { toZonedTime } from "date-fns-tz";
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
@@ -65,8 +66,8 @@ export const expensesTable = sqliteTable("expenses", {
   createdAt: text("created_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
-    () => new Date()
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(() =>
+    toZonedTime(new Date(), "Europe/Kiev")
   ),
   comment: text("comment"),
 });

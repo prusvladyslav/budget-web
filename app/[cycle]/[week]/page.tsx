@@ -54,13 +54,13 @@ export default async function Week({
       <Card className="my-4 max-w-fit ">
         <CardContent className="space-y-4 p-6 ">
           <h2 className="text-xl">
-            Total planned ammount for this week:{" "}
+            Total planned amount for this week:{" "}
             <span className="font-bold">
               {categories.reduce((acc, category) => acc + category.planned, 0)}
             </span>
           </h2>
           <h2 className="text-xl">
-            Ammount left for this week:{" "}
+            Amount left for this week:{" "}
             <span className="font-bold">
               {" "}
               {categoriesWithCurrentAmount.reduce(

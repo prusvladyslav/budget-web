@@ -18,6 +18,8 @@ import { useState } from "react";
 import { SelectUser } from "@/db/schema";
 import { getMonth } from "date-fns";
 import { TAddNewCycle } from "@/app/page";
+import { TrashIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const AddNewCycleCard = ({
   action,
@@ -39,6 +41,10 @@ export const AddNewCycleCard = ({
     })),
   });
 
+  const IsSubmitDisabled =
+    categories.length === 0 ||
+    categories.some((category) => !category.planned || !category.title);
+
   return (
     <form
       action={async () => {
@@ -46,25 +52,33 @@ export const AddNewCycleCard = ({
       }}
       className="flex flex-col space-y-4"
     >
-      <div className="flex flex-col  justify-center space-y-4 min-w-[300px] max-w-xs">
-        <h2>New Cycle Creation</h2>
-        <h3>
-          Start date: {user.prefferedStartDate}.{getMonth(new Date()) + 1}
-        </h3>
-        <h3>
-          End date: {user.prefferedEndDate}.{getMonth(new Date()) + 2}
-        </h3>
-      </div>
+      <Card>
+        <CardContent className="flex flex-col  justify-center space-y-4 min-w-[300px] max-w-xs p-6">
+          <h2 className="text-xl font-bold">New Cycle Creation</h2>
+          <h3 className="text-xl font-semibold">
+            Start date:{" "}
+            <span className="font-bold underline">
+              {user.prefferedStartDate}.{getMonth(new Date()) + 1}
+            </span>
+          </h3>
+          <h3 className="text-xl font-semibold">
+            End date:{" "}
+            <span className="font-bold underline">
+              {user.prefferedEndDate}.{getMonth(new Date()) + 2}
+            </span>
+          </h3>
+        </CardContent>
+      </Card>
 
       {categories.map((category, index) => {
         return (
-          <Card className="w-full min-w-[300px] max-w-md p-4" key={category.id}>
+          <Card className="w-full min-w-[300px] max-w-md p-6" key={category.id}>
             <CardContent className="space-y-4">
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label
                     htmlFor="category-title"
-                    className="flex justify-between"
+                    className="flex justify-between font-bold"
                   >
                     Category {index + 1} Title{" "}
                     <button
@@ -75,7 +89,7 @@ export const AddNewCycleCard = ({
                         )
                       }
                     >
-                      x
+                      <TrashIcon className="h-5 w-5" />
                     </button>
                   </Label>
                   <Input
@@ -93,7 +107,7 @@ export const AddNewCycleCard = ({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="planned-amount">
+                  <Label htmlFor="planned-amount" className="font-bold">
                     Planned Amount for category {index + 1}
                   </Label>
                   <Input
@@ -117,7 +131,7 @@ export const AddNewCycleCard = ({
         );
       })}
       <Button
-        className="bg-gray-500"
+        className="bg-green-500"
         type="button"
         onClick={() =>
           setCategories([
@@ -128,7 +142,13 @@ export const AddNewCycleCard = ({
       >
         Add new category
       </Button>
-      <Button type="submit">Save Cycle</Button>
+      <Button
+        type="submit"
+        disabled={IsSubmitDisabled}
+        className={cn(IsSubmitDisabled && "bg-gray-500")}
+      >
+        Save Cycle
+      </Button>
     </form>
   );
 };

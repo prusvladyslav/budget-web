@@ -16,7 +16,7 @@ export type TAddNewWeek = {
 
 async function addNewWeek({ monthId }: TAddNewWeek) {
   "use server";
-  const date = new Date();
+  const date = toZonedTime(new Date(), "Europe/Kiev");
   try {
     await db.insert(weeksTable).values({
       monthId,
