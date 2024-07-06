@@ -73,13 +73,15 @@ export default async function Cycle({ params }: { params: { cycle: string } }) {
   const lastWeek = last(weeks);
 
   const noWeekForCurrentDate =
-    !lastWeek || !isEqual(new Date(lastWeek.dateFrom), currentWeekStartedAt);
+    !lastWeek ||
+    !isEqual(
+      toZonedTime(lastWeek.dateFrom, "Europe/Kiev"),
+      currentWeekStartedAt
+    );
 
   return (
     <>
       <BackButton href="/" title="Back to month page" />
-      <h2>{JSON.stringify(new Date())}</h2>
-      <h2>{JSON.stringify(currentWeekStartedAt)}</h2>
       <div className="flex justify-center items-center p-24 min-h-screen">
         {!weeks.length ? (
           <AddNewWeek action={addNewWeek} monthId={cycle.id} />
