@@ -7,7 +7,7 @@ import { endOfWeek, getMonth, startOfWeek } from "date-fns";
 import { eq } from "drizzle-orm";
 import { last } from "lodash";
 import { Metadata } from "next";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, unstable_noStore } from "next/cache";
 import Link from "next/link";
 
 export type TAddNewWeek = {
@@ -46,6 +46,7 @@ async function addNewWeek({ monthId }: TAddNewWeek) {
 }
 
 export default async function Cycle({ params }: { params: { cycle: string } }) {
+  unstable_noStore();
   const cycle = await db.query.cyclesTable.findFirst({
     where: eq(cyclesTable.dateFrom, decodeURIComponent(params.cycle)),
   });
@@ -89,5 +90,3 @@ export const metadata: Metadata = {
   title: "Weeks page",
   description: "Weeks page",
 };
-
-export const dynamic = "force-dynamic";

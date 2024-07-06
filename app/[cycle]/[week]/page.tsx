@@ -10,12 +10,14 @@ import {
 } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { Metadata } from "next";
+import { unstable_noStore } from "next/cache";
 
 export default async function Week({
   params,
 }: {
   params: { cycle: string; week: string };
 }) {
+  unstable_noStore();
   const week = await db.query.weeksTable.findFirst({
     where: eq(weeksTable.dateFrom, decodeURIComponent(params.week)),
   });

@@ -11,12 +11,14 @@ import {
 } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { Metadata } from "next";
+import { unstable_noStore } from "next/cache";
 
 export default async function Category({
   params,
 }: {
   params: { cycle: string; week: string; category: string };
 }) {
+  unstable_noStore();
   const cycle = await db.query.cyclesTable.findFirst({
     where: eq(cyclesTable.dateFrom, decodeURIComponent(params.cycle)),
   });

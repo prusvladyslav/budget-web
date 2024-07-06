@@ -8,7 +8,7 @@ import {
 } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { getMonth } from "date-fns";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, unstable_noStore } from "next/cache";
 import { redirect } from "next/navigation";
 import { last } from "lodash";
 import { AddNewCycleCard } from "@/components/cycle/AddNewCycleCard";
@@ -69,6 +69,7 @@ async function addNewCycle({
 }
 
 export default async function Home() {
+  unstable_noStore();
   const user = await db.query.usersTable.findFirst({
     where: eq(usersTable.id, "1"),
   });
