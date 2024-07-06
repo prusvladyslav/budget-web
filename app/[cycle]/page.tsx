@@ -3,7 +3,7 @@ import { AddNewWeek } from "@/components/weeks/AddNewWeek";
 import { WeeksCarousel } from "@/components/weeks/WeeksCarousel";
 import { db } from "@/db";
 import { cyclesTable, weeksTable } from "@/db/schema";
-import { endOfWeek, getMonth, startOfWeek } from "date-fns";
+import { endOfWeek, getMonth, isEqual, startOfWeek } from "date-fns";
 import { eq } from "drizzle-orm";
 import { last } from "lodash";
 import { Metadata } from "next";
@@ -59,26 +59,15 @@ export default async function Cycle({ params }: { params: { cycle: string } }) {
   });
 
   const currentWeekStartedAt = startOfWeek(new Date(), { weekStartsOn: 1 });
-  console.log(currentWeekStartedAt.toISOString());
 
   const lastWeek = last(weeks);
 
   const noWeekForCurrentDate =
-    !lastWeek || lastWeek.dateFrom !== currentWeekStartedAt.toISOString();
+    !lastWeek || !isEqual(new Date(lastWeek.dateFrom), currentWeekStartedAt);
 
   return (
     <>
       <BackButton href="/" title="Back to month page" />
-      <div>
-        {JSON.stringify({
-          noWeekForCurrentDate,
-          weeks,
-          lastWeek,
-          lastWeekDateFrom: lastWeek?.dateFrom,
-          currentWeekStartedAt: currentWeekStartedAt.toISOString(),
-        })}
-        <div>{JSON.stringify(new Date())}</div>
-      </div>
       <div className="flex justify-center items-center p-24 min-h-screen">
         {!weeks.length ? (
           <AddNewWeek action={addNewWeek} monthId={cycle.id} />
